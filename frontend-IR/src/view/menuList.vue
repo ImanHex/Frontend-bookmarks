@@ -34,6 +34,12 @@
         </li>
       </ul>
     </div>
+
+    <div class="ml-44" v-if="searchFailed">
+      <h2 class="text-xl font-semibold mb-4">
+        No recipes found matching "{{ currentQuery }}" with a score above 0.
+      </h2>
+    </div>
   </div>
 </template>
 
@@ -46,19 +52,28 @@ export default {
     const searchQuery = ref("");
     const recipes = ref([]);
     const currentQuery = ref("");
+    const searchFailed = ref(false); // New state to track if search failed
 
     const fetchRecipes = async () => {
       if (!searchQuery.value.trim()) return;
+      searchFailed.value = false; // Reset the search failed state on new search
 
       try {
         const response = await RecipeSearch.getRecipe(searchQuery.value);
-        recipes.value = response.data.results;
-        console.log(recipes.value);
-        console.log(JSON.parse(JSON.stringify(recipes.value)));
+        if (
+          response.data.message ===
+          "No recipes found matching your query"
+        ) {
+          // Handle no results found
+          searchFailed.value = true;
+        } else {
+          recipes.value = response.data.results;
+        }
         currentQuery.value = searchQuery.value;
       } catch (error) {
         console.error("Failed to fetch recipes:", error);
         recipes.value = []; // Clear previous results on error
+        searchFailed.value = true; // Indicate search failed
       }
     };
 
@@ -67,6 +82,7 @@ export default {
       recipes,
       currentQuery,
       fetchRecipes,
+      searchFailed,
     };
   },
 };
