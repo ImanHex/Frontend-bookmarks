@@ -44,22 +44,25 @@
           :key="recipe.index"
           class="p-4 bg-white border border-gray-200 rounded-lg shadow-md"
         >
-          <img
-            :src="
-              recipe.images !== 'No Data Provide'
-                ? recipe.images
-                : 'https://i.pinimg.com/564x/b9/a9/66/b9a9668152a83397e96215ec1cadae0f.jpg'
-            "
-            alt="Recipe"
-            class="recipe-image w-full h-52 object-cover rounded-lg shadow-lg"
-          />
+          <router-link :to="`/recipe/${recipe.index}`">
+            <img
+              :src="
+                recipe.images !== 'No Data Provide'
+                  ? recipe.images
+                  : 'https://i.pinimg.com/564x/b9/a9/66/b9a9668152a83397e96215ec1cadae0f.jpg'
+              "
+              alt="Recipe"
+              class="recipe-image w-full h-52 object-cover rounded-lg shadow-lg"
+            />
 
-          <h3 class="text-md text-blue-600 font-semibold p-4">
-            {{ index + 1 }}. {{ recipe.name }}
-          </h3>
+            <h3 class="text-md text-blue-600 font-semibold p-4">
+              {{ index + 1 }}. {{ recipe.name }}
+            </h3>
+          </router-link>
         </li>
       </ul>
     </div>
+
     <div class="ml-44" v-if="searchFailed">
       <h2 class="text-xl font-semibold mb-4">
         No recipes found matching {{ currentQuery }}.

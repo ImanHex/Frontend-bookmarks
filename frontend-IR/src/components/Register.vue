@@ -37,7 +37,7 @@
       <div v-if="registrationMessage" class="mt-4 text-black">
         {{ registrationMessage }}
       </div>
-      <router-link to="/login" class="mt-4 block text-black hover:underline"
+      <router-link to="/login" class="mt-4 block text-blue-700 hover:underline"
         >Already have an account? Login</router-link
       >
     </div>

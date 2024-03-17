@@ -25,4 +25,21 @@ export default {
       throw new Error(error.response.data.message || "Error registering user");
     }
   },
+  getRecipeById(index: number): Promise<AxiosResponse<RecipeItem>> {
+    return apiClient.get<RecipeItem>(`/recipe/${index}`);
+  },
+  createFolder(folderName) {
+    return apiClient.post("/folder", { name: folderName });
+  },
+
+  getFolders() {
+    return apiClient.get("/folders");
+  },
+  bookmarks(recipeId, folderId){
+    return apiClient.post(`/boockmark/${recipeId}`, { folderId });
+  },
+  unbookmarkRecipe(recipeId, folderId){
+    return apiClient.delete(`/bookmark/${recipeId}`, { data: { folderId } });
+
+  }
 };

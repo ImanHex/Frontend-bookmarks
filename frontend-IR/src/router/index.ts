@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Register from "@/components/Register.vue";
 import Login from "@/components/Login.vue";
 import Search from "@/view/menuList.vue";
+import RecipeDetail from "@/components/RecipeDetail.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,7 +18,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/search",
     name: "Search",
-    component: Search, // Use the Search component for the search page
+    component: Search,
+  },
+  {
+    path: "/recipe/:index",
+    name: "RecipeDetail",
+    component: RecipeDetail,
   },
 ];
 
