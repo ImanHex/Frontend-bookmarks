@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <div class="m-10 ml-44 w-full">
+    <div class="w-screen h-20 bg-slate-300">
       <input
         v-model="searchQuery"
         placeholder="Search for recipes..."
         @keyup.enter="fetchRecipes"
-        class="mt-4 w-9/12 px-4 py-2 border rounded shadow-sm"
+        class="mt-4 ml-32 w-9/12 px-4 py-2 border rounded shadow-sm"
       />
       <button
         @click="fetchRecipes"
-        class="mt-4 ml-14 px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600"
+        class="mt-4 ml-6 px-4 py-2 bg-blue-500 text-white font-bold rounded hover:bg-blue-600"
       >
         Search
       </button>
@@ -28,8 +28,10 @@
         >
       </p>
     </div>
+
+    <!-- show search result -->
     <div
-      class="ml-44 bg-blue-50 rounded-md shadow p-2 m-2"
+      class="ml-44 bg-blue-200 rounded-md shadow p-2 m-2"
       v-if="recipes && recipes.length > 0"
     >
       <h2 class="p-2">
@@ -42,7 +44,7 @@
         <li
           v-for="(recipe, index) in recipes"
           :key="recipe.index"
-          class="p-4 bg-white border border-gray-200 rounded-lg shadow-md"
+          class="p-4 bg-blue-50 border border-gray-200 rounded-lg shadow-md"
         >
           <router-link :to="`/recipe/${recipe.index}`">
             <img
@@ -62,17 +64,50 @@
         </li>
       </ul>
     </div>
-
     <div class="ml-44" v-if="searchFailed">
       <h2 class="text-xl font-semibold mb-4">
         No recipes found matching {{ currentQuery }}.
       </h2>
     </div>
+
+    <!-- Recommendations -->
+
+    <div class="ml-44" v-if="recommendations">
+      <h1
+        class="w-full bg-green-100 rounded-md shadow p-4 mt-5 mb-1 font-medium"
+      >
+        You may like
+      </h1>
+
+      <ul class="grid grid-cols-4 gap-4 mt-5">
+        <li
+          v-for="recommendation in recommendations.results"
+          :key="recommendation.index"
+          class="p-4 bg-green-50 border border-gray-200 rounded-lg shadow-md"
+        >
+          <router-link :to="`/recipe/${recommendation.index}`">
+            <img
+              :src="
+                recommendation.images !== 'No Data Provide'
+                  ? recommendation.images
+                  : 'https://i.pinimg.com/564x/b9/a9/66/b9a9668152a83397e96215ec1cadae0f.jpg'
+              "
+              alt="Recommendation"
+              class="recommendation-image w-full h-52 object-cover rounded-lg shadow-lg"
+            />
+
+            <h3 class="text-md text-blue-600 font-semibold p-4">
+              {{ recommendation.name }}
+            </h3>
+          </router-link>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import RecipeSearch from "../services/RecipeSearch";
 
 export default {
@@ -82,6 +117,8 @@ export default {
     const currentQuery = ref("");
     const searchFailed = ref(false);
     const suggestedQuery = ref(null);
+    const recommendations = ref([]);
+
     const fetchRecipes = async () => {
       if (!searchQuery.value.trim()) return;
       searchFailed.value = false;
@@ -116,6 +153,16 @@ export default {
       }
     };
 
+    const fetchRecommendations = async () => {
+      try {
+        const response = await RecipeSearch.getRecommendations();
+        recommendations.value = response.data;
+        console.log("Recommendations:", recommendations.value);
+      } catch (error) {
+        console.error("Error fetching recommendations:", error);
+      }
+    };
+
     const useSuggestedQuery = () => {
       searchQuery.value = suggestedQuery.value; // Set search query to the suggested query
       fetchRecipes(); // Fetch recipes using the suggested query
@@ -127,6 +174,10 @@ export default {
       fetchRecipes(); // Re-fetch recipes based on the accepted suggestion
     };
 
+    onMounted(() => {
+      fetchRecommendations(); // Fetch recommendations when the component is mounted
+    });
+
     return {
       searchQuery,
       recipes,
@@ -134,6 +185,7 @@ export default {
       fetchRecipes,
       searchFailed,
       suggestedQuery,
+      recommendations,
       useSuggestedQuery,
       acceptSuggestion,
     };

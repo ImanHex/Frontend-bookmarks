@@ -1,9 +1,14 @@
 <template>
-  <div class="flex justify-center px-2 py-20">
-    <!-- Adjusted padding for overall spacing -->
+  <div class="flex justify-center px-2 py-10">
     <div
       class="bg-white rounded-xl shadow-lg w-full max-w-4xl md:flex md:flex-col overflow-hidden ml-32"
     >
+      <router-link
+        to="/Search"
+        class="text-gray-200 bg-slate-500 p-5 hover:text-gray-400"
+      >
+        <p class="text-md font-semibold">Back</p>
+      </router-link>
       <!-- Image Section -->
       <div class="md:order-1">
         <img

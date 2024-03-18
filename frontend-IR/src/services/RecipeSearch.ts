@@ -31,15 +31,21 @@ export default {
   createFolder(folderName) {
     return apiClient.post("/folder", { name: folderName });
   },
+  getRecommendations(): Promise<
+    AxiosResponse<{ recommendations: RecipeItem[] }>
+  > {
+    return apiClient.get<{ recommendations: RecipeItem[] }>(
+      "/recipes/recommend"
+    );
+  },
 
   getFolders() {
     return apiClient.get("/folders");
   },
-  bookmarks(recipeId, folderId){
+  bookmarks(recipeId, folderId) {
     return apiClient.post(`/boockmark/${recipeId}`, { folderId });
   },
-  unbookmarkRecipe(recipeId, folderId){
+  unbookmarkRecipe(recipeId, folderId) {
     return apiClient.delete(`/bookmark/${recipeId}`, { data: { folderId } });
-
-  }
+  },
 };
