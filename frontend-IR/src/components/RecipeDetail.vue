@@ -42,17 +42,34 @@
         </div>
 
         <!-- Rating and Save Icon Section -->
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center mt-10">
           <!-- Rating Display -->
+
           <div class="text-yellow-400 text-2xl">
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="far fa-star"></i>
+            <i
+              v-for="star in 5"
+              :key="star"
+              :class="[
+                'fas',
+                userRating >= star
+                  ? 'fa-star text-yellow-400'
+                  : 'fa-star text-black',
+                'cursor-pointer',
+              ]"
+              @click="rateRecipe(star)"
+            ></i>
           </div>
 
-          <button class="text-gray-500 hover:text-gray-700 text-2xl">
-            <i class="far fa-bookmark"></i>
+          <button
+            class="text-gray-500 hover:text-gray-700 text-2xl"
+            @click="toggleBookmark"
+          >
+            <i
+              :class="[
+                'far',
+                isBookmarked ? 'fa-bookmark text-red-500' : 'fa-bookmark',
+              ]"
+            ></i>
           </button>
         </div>
       </div>
@@ -69,6 +86,8 @@ export default {
   setup() {
     const recipe = ref({});
     const route = useRoute();
+    const isBookmarked = ref(false);
+    const userRating = ref(0);
 
     onMounted(async () => {
       const recipeId = route.params.index;
@@ -79,9 +98,30 @@ export default {
         console.error(error);
       }
     });
+    const toggleBookmark = async () => {
+      console.log("Toggle bookmark function called");
+      isBookmarked.value = !isBookmarked.value;
+      console.log(isBookmarked.value);
+      if (isBookmarked.value) {
+        try {
+          //API later naa
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    const rateRecipe = (rating) => {
+      console.log("Rating:", rating);
+      userRating.value = rating;
+      // API not done
+    };
 
     return {
       recipe,
+      isBookmarked,
+      toggleBookmark,
+      rateRecipe,
+      userRating,
     };
   },
 };
