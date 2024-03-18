@@ -5,7 +5,7 @@
     >
       <router-link
         to="/Search"
-        class="text-gray-200 bg-slate-500 p-5 hover:text-gray-400"
+        class="text-gray-700 bg-slate-300 p-5 hover:text-gray-400"
       >
         <p class="text-md font-semibold">Back</p>
       </router-link>
