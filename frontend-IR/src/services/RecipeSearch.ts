@@ -5,7 +5,7 @@ import type { UserItem } from "@/type";
 
 export default {
   getRecipe(query: string): Promise<AxiosResponse<RecipeItem>> {
-    return apiClient.post<RecipeItem>("/search", { query });
+    return apiClient.post<RecipeItem>("/recipes/search", { query });
   },
   register(
     username: string,
@@ -13,20 +13,20 @@ export default {
     password: string
   ): Promise<AxiosResponse<UserItem>> {
     try {
-      return apiClient.post("/register", { username, email, password });
+      return apiClient.post("/user/register ", { username, email, password });
     } catch (error) {
       throw new Error(error.response.data.message || "Error registering user");
     }
   },
   login(username: string, password: string): Promise<AxiosResponse<UserItem>> {
     try {
-      return apiClient.post("/login", { username, password });
+      return apiClient.post("/user/login", { username, password });
     } catch (error) {
       throw new Error(error.response.data.message || "Error registering user");
     }
   },
   getRecipeById(index: number): Promise<AxiosResponse<RecipeItem>> {
-    return apiClient.get<RecipeItem>(`/recipe/${index}`);
+    return apiClient.get<RecipeItem>(`/recipes/recipe/${index}`);
   },
   createFolder(folderName) {
     return apiClient.post("/folder", { name: folderName });
